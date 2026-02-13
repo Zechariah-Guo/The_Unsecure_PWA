@@ -18,7 +18,7 @@ qrcode==8.2 # Released: 31 Jul 2024 https://pypi.org/project/qrcode/
 
 # File locking for race condition prevention
 portalocker==3.2.0 # Released: 19 Jan 2025 https://pypi.org/project/portalocker/
-pywin32==311 # Released: 17 May 2023 https://pypi.org/project/pywin32/ (Windows file locking dependency)
+pywin32==311; sys_platform == 'win32' # Released: 17 May 2023 https://pypi.org/project/pywin32/ (Windows file locking dependency) (Checks so it only try to install on windows, allowing linux distros to still run this (including GitHub Codespaces))
 
 # Token management and signing
 itsdangerous==2.2.0 # Released: 17 Apr 2024 https://pypi.org/project/itsdangerous/
