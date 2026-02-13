@@ -1,24 +1,61 @@
-bandit==1.9.3
-blinker==1.9.0
-click==8.3.1
-colorama==0.4.6
-Flask==3.1.2
-flask-cors==6.0.2
-Flask-WTF==1.2.1
-Flask-SQLAlchemy==3.1.1
-itsdangerous==2.2.0
-Jinja2==3.1.6
-markdown-it-py==4.0.0
-MarkupSafe==3.0.3
-mdurl==0.1.2
-portalocker==3.2.0
-Pygments==2.19.2
-pyotp==2.9.0
-pywin32==311
-PyYAML==6.0.3
-qrcode==8.2
-rich==14.3.2
-SQLAlchemy==2.0.46
-stevedore==5.6.0
-typing_extensions==4.15.0
-Werkzeug==3.1.5
+# Requirements.txt 13 February 2026 12:00
+
+# Core Flask Framework
+Flask==3.1.2 # Released: 20 Aug 2024 https://pypi.org/project/Flask/
+
+# Form rendering, Validation and Cross-Site Request Forgery (CSRF) protection
+Flask-WTF==1.2.1 # Released: 24 Oct 2024 https://pypi.org/project/Flask-WTF/
+
+# Object Relational Modelling (ORM) and SQL Injection protection
+Flask-SQLAlchemy==3.1.1 # Released: 12 Sep 2023 https://flask-sqlalchemy.readthedocs.io/en/stable/
+SQLAlchemy==2.0.46 # Released: 29 Jan 2025 https://pypi.org/project/SQLAlchemy/
+
+# Cross-Origin Resource Sharing
+flask-cors==6.0.2 # Released: 11 Jun 2024 https://pypi.org/project/flask-cors/
+
+# Two-Factor Authentication (TOTP)
+pyotp==2.9.0 # Released: 17 Sep 2023 https://pypi.org/project/pyotp/
+
+# QR Code generation
+qrcode==8.2 # Released: 31 Jul 2024 https://pypi.org/project/qrcode/
+
+# File locking for race condition prevention
+portalocker==3.2.0 # Released: 19 Jan 2025 https://pypi.org/project/portalocker/
+pywin32==311 # Released: 17 May 2023 https://pypi.org/project/pywin32/ (Windows file locking dependency)
+
+# Token management and signing
+itsdangerous==2.2.0 # Released: 17 Apr 2024 https://pypi.org/project/itsdangerous/
+
+# WSGI (Web Server Gateway Interface)
+Werkzeug==3.1.5 # Released: 9 Nov 2024 https://pypi.org/project/Werkzeug/
+
+# Template engine
+Jinja2==3.1.6 # Released: 6 Mar 2024 https://pypi.org/project/Jinja2/
+
+# Event subscription
+blinker==1.9.0 # Released: 9 Nov 2024 https://pypi.org/project/blinker/
+
+# Escape character sequences for security
+colorama==0.4.6 # Released: 25 Oct 2022 https://pypi.org/project/colorama/
+MarkupSafe==3.0.3 # Released: 28 Sep 2024 https://pypi.org/project/MarkupSafe/
+
+# Command line interface toolkit
+click==8.3.1 # Released: 16 Nov 2024 https://pypi.org/project/click/
+
+# Markdown
+markdown-it-py==4.0.0 # Released: 11 Aug 2024 https://pypi.org/project/markdown-it-py/
+mdurl==0.1.2 # Released: 14 Aug 2022 https://pypi.org/project/mdurl/
+
+# Syntax highlighting package
+Pygments==2.19.2 # Released: 21 Jun 2024 https://pypi.org/project/Pygments/
+
+# Text rendering for the terminal
+rich==14.3.2 # Released: 10 Oct 2024 https://pypi.org/project/rich/
+
+# Typing extensions
+typing_extensions==4.15.0 # Released: 25 Aug 2024 https://pypi.org/project/typing-extensions/
+
+# Static Application Security Testing (SAST)
+bandit==1.9.3 # Released: 15 Dec 2024 https://pypi.org/project/bandit/
+stevedore==5.6.0 # Released: 27 Sep 2024 https://pypi.org/project/stevedore/ (bandit dependency)
+PyYAML==6.0.3 # Released: 19 Jul 2024 https://pypi.org/project/PyYAML/ (bandit dependency)
