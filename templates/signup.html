@@ -2,7 +2,7 @@
 {% block content %}
 <h1>Signup Form</h1>
 {% if msg %}
-<div>{{ msg }}</div>
+<div>{{ msg }}</div><!-- {{ pad }} -->
 {% endif %}
 <form action="/signup.html" method="POST" class="box">
     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />

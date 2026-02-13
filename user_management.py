@@ -6,6 +6,10 @@ from werkzeug.security import generate_password_hash, check_password_hash
 DUMMY_PASSWORD_HASH = generate_password_hash("invalid-password")
 
 
+def consume_password_check(password):
+    check_password_hash(DUMMY_PASSWORD_HASH, password)
+
+
 def insertUser(username, password):
     password_hash = generate_password_hash(password)
     with sql.connect("database_files/database.db") as con:
