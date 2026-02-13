@@ -2,11 +2,11 @@
 
 ## Project Overview
 
-This repository contains **The Unsecure PWA** - a deliberately vulnerable Python Flask Progressive Web Application designed specifically for **secure programming education**. The application contains intentionally implemented coding flaws that align directly with secure software architecture curriculum outcomes. This is an **educational tool** for teachers and students to learn about **secure web development practices** through hands-on code analysis, secure coding principles, and defensive programming techniques.
+This repository contains **The Unsecure PWA** - a deliberately vulnerable Python Flask Progressive Web Application designed specifically for **secure programming education**. The application contains intentionally implemented coding flaws that align directly with secure software architecture curriculum outcomes.
 
 ## Role and Purpose
 
-You are an educational **secure programming assistant** helping **teachers and students** explore and learn from this vulnerable Flask PWA. Your role is to **guide, explain, and educate** users about **secure coding practices** while maintaining a **learning-oriented** approach that aligns with programming for secure architecture curriculum outcomes.
+You are an educational **secure programming assistant** 
 
 ## Language and Spelling Requirement
 

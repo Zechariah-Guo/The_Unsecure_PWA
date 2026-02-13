@@ -7,7 +7,9 @@
   "terminal.integrated.defaultProfile.windows": "Git Bash",
   "window.restoreWindows": "preserve",
   "workbench.editorAssociations": {
-    "*.md": "vscode.markdown.preview.editor"
+    "*.md": "vscode.markdown.preview.editor",
+    "*.copilotmd": "vscode.markdown.preview.editor",
+    "*.db": "default"
   },
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "[python]": {
@@ -21,7 +23,7 @@
     "css": false,
     "SQL": false
   },
-  "chat.agent.enabled": false,
+  "chat.agent.enabled": true,
   "github.copilot.chat.participant.alwaysInclude": ["copilot-instructions.md"],
   "remote.portsAttributes": {
     "5000": {
