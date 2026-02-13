@@ -7,7 +7,7 @@
   "hostRequirements": {
     "cpus": 4
   },
-  "postCreateCommand": "pip install -r requirements.txt",
+  "postCreateCommand": "pip3 install --user -r requirements.txt",
   "postAttachCommand": "python main.py",
   "portsAttributes": {
     "5000": {
