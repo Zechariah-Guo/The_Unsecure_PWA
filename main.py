@@ -144,9 +144,9 @@ def signup():
         username = request.form.get("username", "").strip()
         password = request.form.get("password", "")
         if not _is_valid_username(username):
-            return render_template("/signup.html", msg="Invalid username.")
+            return render_template("/signup.html", msg="Invalid signup details.")
         if not _is_valid_password(password):
-            return render_template("/signup.html", msg="Weak password.")
+            return render_template("/signup.html", msg="Invalid signup details.")
         dbHandler.insertUser(username, password)
         return redirect(
             "/index.html?msg=Account created. You can enable 2FA after login."
@@ -170,7 +170,7 @@ def home():
         username = request.form.get("username", "").strip()
         password = request.form.get("password", "")
         if not _is_valid_username(username) or not password:
-            return render_template("/index.html", msg="Invalid credentials.")
+            return render_template("/index.html", msg="Invalid username or password.")
         isLoggedIn = dbHandler.retrieveUsers(username, password)
         if isLoggedIn:
             enabled, _ = dbHandler.get_2fa_status(username)
@@ -187,7 +187,7 @@ def home():
             )
         else:
             app.logger.warning("Failed login attempt for username: %s", username)
-            return render_template("/index.html", msg="Login failed.")
+            return render_template("/index.html", msg="Invalid username or password.")
     else:
         return render_template("/index.html")
 
