@@ -10,9 +10,6 @@ Flask-WTF==1.2.1 # Released: 24 Oct 2024 https://pypi.org/project/Flask-WTF/
 Flask-SQLAlchemy==3.1.1 # Released: 12 Sep 2023 https://flask-sqlalchemy.readthedocs.io/en/stable/
 SQLAlchemy==2.0.46 # Released: 29 Jan 2025 https://pypi.org/project/SQLAlchemy/
 
-# Cross-Origin Resource Sharing
-flask-cors==6.0.2 # Released: 11 Jun 2024 https://pypi.org/project/flask-cors/
-
 # Two-Factor Authentication (TOTP)
 pyotp==2.9.0 # Released: 17 Sep 2023 https://pypi.org/project/pyotp/
 

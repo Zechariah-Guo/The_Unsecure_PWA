@@ -7,7 +7,6 @@ from flask import request
 from flask import redirect
 from flask import session
 from flask_wtf.csrf import CSRFProtect
-from flask_cors import CORS
 import pyotp
 import qrcode
 import qrcode.image.svg
@@ -18,8 +17,6 @@ import user_management as dbHandler
 
 app = Flask(__name__)
 app.secret_key = os.environ.get("FLASK_SECRET_KEY", "dev-secret-key")
-# Enable CORS to allow cross-origin requests (needed for CSRF demo in Codespaces)
-CORS(app)
 csrf = CSRFProtect(app)
 
 USERNAME_RE = re.compile(r"^[A-Za-z0-9_]{3,32}$")
