@@ -159,3 +159,35 @@ label,
     border-radius: 0.5rem;
     margin: 1rem 0;
 }
+.text-center {
+    text-align: center;
+}
+.feedback-textarea {
+    height: 100px;
+    vertical-align: top;
+}
+.qr-container {
+    text-align: center;
+    margin: 1.5rem 0;
+}
+.manual-setup-summary {
+    cursor: pointer;
+    color: #666;
+    margin-top: 1rem;
+}
+.manual-setup-content {
+    background: #f5f5f5;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    margin-top: 0.5rem;
+}
+.manual-setup-list {
+    text-align: left;
+    margin-left: 2rem;
+    font-size: 0.9em;
+}
+.manual-setup-code {
+    background: #fff;
+    padding: 0.25rem;
+    font-weight: bold;
+}

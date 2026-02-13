@@ -33,10 +33,25 @@ ALLOWED_REDIRECTS = {
     "/2fa/setup",
     "/2fa/verify",
 }
+ALLOWED_MESSAGES = {
+    "Invalid redirect",
+    "Please log in",
+    "Account created. You can enable 2FA after login.",
+    "Logged out",
+    "2FA already enabled",
+    "2FA not enabled",
+}
 
 
 def _is_valid_username(username):
     return bool(USERNAME_RE.fullmatch(username or ""))
+
+
+def _sanitize_message(msg):
+    """Validate message against whitelist to prevent injection attacks."""
+    if msg in ALLOWED_MESSAGES:
+        return msg
+    return ""
 
 
 def _is_valid_password(password):
@@ -55,7 +70,7 @@ def add_security_headers(response):
     response.headers["Content-Security-Policy"] = (
         "default-src 'self'; "
         "base-uri 'self'; "
-        "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; "
+        "style-src 'self' https://fonts.googleapis.com; "
         "font-src 'self' https://fonts.gstatic.com; "
         "img-src 'self' data:; "
         "script-src 'self'; "
@@ -152,7 +167,7 @@ def home():
         return _safe_redirect(url)
     # Pass message to front end
     elif request.method == "GET":
-        msg = request.args.get("msg", "")
+        msg = _sanitize_message(request.args.get("msg", ""))
         return render_template("/index.html", msg=msg, state=bool(session.get("user")))
     elif request.method == "POST":
         username = request.form.get("username", "").strip()

@@ -1,8 +1,8 @@
 {% extends 'layout.html' %}
 {% block content %}
-<h1 style="text-align: center;">Enable Two-Factor Authentication</h1>
+<h1 class="text-center">Enable Two-Factor Authentication</h1>
 <p>Welcome {{ value }}. Scan the QR code with your authenticator app.</p>
-<div style="text-align: center; margin: 1.5rem 0;">
+<div class="qr-container">
   {{ qr_code_svg|safe }}
 </div>
 <p>Once scanned, enter the 6-digit code from your app below:</p>
@@ -27,15 +27,15 @@
   </div>
 </form>
 <details>
-  <summary style="cursor: pointer; color: #666; margin-top: 1rem;">Can't scan? Manual setup</summary>
-  <div style="background: #f5f5f5; padding: 1rem; border-radius: 0.5rem; margin-top: 0.5rem;">
+  <summary class="manual-setup-summary">Can't scan? Manual setup</summary>
+  <div class="manual-setup-content">
     <p><strong>Manual Setup Instructions:</strong></p>
-    <ol style="text-align: left; margin-left: 2rem; font-size: 0.9em;">
+    <ol class="manual-setup-list">
       <li>Open your authenticator app</li>
       <li>Select "Add account" or "+"</li>
       <li>Choose "Enter a setup key"</li>
       <li>Account: <strong>Unsecure PWA ({{ value }})</strong></li>
-      <li>Key: <code style="background: #fff; padding: 0.25rem; font-weight: bold;">{{ secret }}</code></li>
+      <li>Key: <code class="manual-setup-code">{{ secret }}</code></li>
       <li>Type: Time-based</li>
     </ol>
   </div>
