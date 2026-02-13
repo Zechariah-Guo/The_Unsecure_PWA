@@ -6,13 +6,13 @@ from werkzeug.security import generate_password_hash, check_password_hash
 DUMMY_PASSWORD_HASH = generate_password_hash("invalid-password")
 
 
-def insertUser(username, password, DoB):
+def insertUser(username, password):
     password_hash = generate_password_hash(password)
     with sql.connect("database_files/database.db") as con:
         cur = con.cursor()
         cur.execute(
-            "INSERT INTO users (username,password,dateOfBirth,otp_enabled) VALUES (?,?,?,?)",
-            (username, password_hash, DoB, 0),
+            "INSERT INTO users (username,password,otp_enabled) VALUES (?,?,?)",
+            (username, password_hash, 0),
         )
 
 

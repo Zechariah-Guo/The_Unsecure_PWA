@@ -1,4 +1,3 @@
-import base64
 import os
 import re
 from io import BytesIO
@@ -11,6 +10,7 @@ from flask_wtf.csrf import CSRFProtect
 from flask_cors import CORS
 import pyotp
 import qrcode
+import qrcode.image.svg
 import user_management as dbHandler
 
 # Code snippet for logging a message
@@ -24,7 +24,6 @@ csrf = CSRFProtect(app)
 
 USERNAME_RE = re.compile(r"^[A-Za-z0-9_]{3,32}$")
 PASSWORD_RE = re.compile(r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,64}$")
-DATE_RE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
 ALLOWED_REDIRECTS = {
     "/",
     "/index.html",
@@ -42,10 +41,6 @@ def _is_valid_username(username):
 
 def _is_valid_password(password):
     return bool(PASSWORD_RE.fullmatch(password or ""))
-
-
-def _is_valid_dob(dob_value):
-    return bool(DATE_RE.fullmatch(dob_value or ""))
 
 
 def _safe_redirect(target):
@@ -75,14 +70,17 @@ def add_security_headers(response):
     return response
 
 
-def _build_qr_code_b64(username, secret):
+def _build_qr_code_svg(username, secret):
     otp_uri = pyotp.totp.TOTP(secret).provisioning_uri(
         name=username, issuer_name="Unsecure PWA"
     )
-    qr_image = qrcode.make(otp_uri)
+    qr = qrcode.QRCode(image_factory=qrcode.image.svg.SvgPathImage)
+    qr.add_data(otp_uri)
+    qr.make(fit=True)
     stream = BytesIO()
-    qr_image.save(stream, format="PNG")
-    return base64.b64encode(stream.getvalue()).decode("ascii")
+    img = qr.make_image()
+    img.save(stream)
+    return stream.getvalue().decode("utf-8")
 
 
 def _should_show_2fa_cta(username):
@@ -133,14 +131,11 @@ def signup():
     if request.method == "POST":
         username = request.form.get("username", "").strip()
         password = request.form.get("password", "")
-        DoB = request.form.get("dob", "").strip()
         if not _is_valid_username(username):
             return render_template("/signup.html", msg="Invalid username.")
         if not _is_valid_password(password):
             return render_template("/signup.html", msg="Weak password.")
-        if not _is_valid_dob(DoB):
-            return render_template("/signup.html", msg="Invalid date of birth.")
-        dbHandler.insertUser(username, password, DoB)
+        dbHandler.insertUser(username, password)
         return redirect(
             "/index.html?msg=Account created. You can enable 2FA after login."
         )
@@ -220,13 +215,20 @@ def two_factor_setup():
         return render_template(
             "/2fa.html",
             value=username,
-            qr_code=_build_qr_code_b64(username, secret),
+            qr_code_svg=_build_qr_code_svg(username, secret),
+            secret=secret,
+            state=True,
             msg="Invalid code. Try again.",
         )
 
     session["setup_secret"] = pyotp.random_base32()
-    qr_code_b64 = _build_qr_code_b64(username, session["setup_secret"])
-    return render_template("/2fa.html", value=username, qr_code=qr_code_b64)
+    return render_template(
+        "/2fa.html",
+        value=username,
+        qr_code_svg=_build_qr_code_svg(username, session["setup_secret"]),
+        secret=session["setup_secret"],
+        state=True,
+    )
 
 
 @app.route("/2fa/verify", methods=["GET", "POST"])
@@ -255,13 +257,12 @@ def two_factor_verify():
         return render_template(
             "/2fa_verify.html",
             value=pending_user,
+            state=False,
             msg="Invalid code. Try again.",
         )
 
-    return render_template("/2fa_verify.html", value=pending_user)
+    return render_template("/2fa_verify.html", value=pending_user, state=False)
 
 
 if __name__ == "__main__":
-    app.config["TEMPLATES_AUTO_RELOAD"] = True
-    app.config["SEND_FILE_MAX_AGE_DEFAULT"] = 0
-    app.run(debug=True, host="0.0.0.0", port=5000)
+    app.run(debug=False, host="127.0.0.1", port=5000)

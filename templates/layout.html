@@ -3,22 +3,23 @@
    <head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    	<meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; script-src 'self'; connect-src 'self'; object-src 'none'; frame-ancestors 'none'; form-action 'self'" />
-	<link rel="stylesheet" type="text/css" href="static/css/style.css">
+    	<meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; script-src 'self'; connect-src 'self'; object-src 'none'; form-action 'self'" />
+	<link rel="stylesheet" type="text/css" href="/static/css/style.css">
         <title>The Unsecure PWA</title>
-        <link rel="manifest" href="static/manifest.json" />
-        <link rel="icon" type="image/x-icon" href="static/images/favicon.png" />
+        <link rel="manifest" href="/static/manifest.json" />
+        <link rel="icon" type="image/x-icon" href="/static/images/favicon.png" />
         <meta name="theme-color" content="#14E6DD" />
    </head>
    <body>  
     <main>
         <nav>
-            <img src="static\images\logo.svg" alt="The unsecure website logo." />
+            <img src="/static/images/logo.svg" alt="The unsecure website logo." />
             <h1>The Unsecure PWA</h1>
             <ul class="topnav">
-                <li><a href="/">Home</a></li>
-                <li><a href="/signup.html">Signup</a></li>
-                {% if state %}
+                {% if not state %}
+                    <li><a href="/">Login</a></li>
+                    <li><a href="/signup.html">Signup</a></li>
+                {% else %}
                     <li><a href="/success.html">Success</a></li>
                     <li><a href="/logout">Logout</a></li>
                 {% endif %}
@@ -28,7 +29,7 @@
             <em>This progressive web app has been written specifically for students studying the 'Secure Software Architecture' unit. The application has been written with intentional vunerabilities that students are to identify and implement solutions. Users should not use this as a template or enter any real data when interacting with the application.</em>
         </div>
     {% block content %}{% endblock %}
-    <script src="static/js/serviceWorker.js"></script>
-    <script src="static/js/app.js"></script>
+    <script src="/static/js/serviceWorker.js"></script>
+    <script src="/static/js/app.js"></script>
 </body>
 </html>

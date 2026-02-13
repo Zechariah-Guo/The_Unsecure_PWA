@@ -7,13 +7,10 @@
 <form action="/signup.html" method="POST" class="box">
     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
     <div class="input__wrapper">
-        <input type="text" name="username" placeholder="Username" class="input__field" maxlength="32" pattern="[A-Za-z0-9_]{3,32}" autocomplete="username" required>
+        <input type="text" name="username" placeholder="Username (3-32 characters, A-Z, 0-9, _)" class="input__field" maxlength="32" pattern="[A-Za-z0-9_]{3,32}" autocomplete="username" title="Username must be 3-32 characters long and contain only letters, numbers, and underscores" required>
     </div>            
     <div class="input__wrapper">
-        <input type="password" name="password" placeholder="Password" class="input__field" minlength="8" maxlength="64" pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,64}" autocomplete="new-password" required>
-    </div>
-    <div class="input__wrapper">
-        <input type="date" name="dob" placeholder="Date of Birth" class="input__field" autocomplete="bday" required>
+        <input type="password" name="password" placeholder="Password (8+ chars, upper, lower, number, symbol)" class="input__field" minlength="8" maxlength="64" pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,64}" autocomplete="new-password" title="Password must be 8-64 characters and include at least one uppercase letter, one lowercase letter, one number, and one special character" required>
     </div>
     <div class="input__wrapper">
         <button type="submit" class="btn">Submit</button>
