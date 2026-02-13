@@ -3,6 +3,7 @@
    <head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    	<meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; script-src 'self'; connect-src 'self'; object-src 'none'; frame-ancestors 'none'; form-action 'self'" />
 	<link rel="stylesheet" type="text/css" href="static/css/style.css">
         <title>The Unsecure PWA</title>
         <link rel="manifest" href="static/manifest.json" />
@@ -15,11 +16,11 @@
             <img src="static\images\logo.svg" alt="The unsecure website logo." />
             <h1>The Unsecure PWA</h1>
             <ul class="topnav">
-                <li><a href="?url=/">Home</a></li>
-                <li><a href="?url=/signup.html">Signup</a></li>
+                <li><a href="/">Home</a></li>
+                <li><a href="/signup.html">Signup</a></li>
                 {% if state %}
-                    <li><a href="?url=/success.html">Success</a></li>
-                    <li><a href="?url=/">Logout</a></li>
+                    <li><a href="/success.html">Success</a></li>
+                    <li><a href="/logout">Logout</a></li>
                 {% endif %}
             </ul>
         </nav>
@@ -29,6 +30,5 @@
     {% block content %}{% endblock %}
     <script src="static/js/serviceWorker.js"></script>
     <script src="static/js/app.js"></script>
-    <script src="https//getfreebootstrap.ru/bootstrap.js"></script>    
 </body>
 </html>

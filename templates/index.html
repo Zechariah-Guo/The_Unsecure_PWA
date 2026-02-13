@@ -1,6 +1,7 @@
 {% extends 'layout.html' %} {% block content %}
 <h1>Login</h1>
 <form action="/" method="post" class="box">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
   <div class="input__wrapper">
     <input
       type="text"
@@ -8,6 +9,9 @@
       id="username"
       placeholder="Username"
       class="input__field"
+      maxlength="32"
+      pattern="[A-Za-z0-9_]{3,32}"
+      autocomplete="username"
       required
     />
   </div>
@@ -18,6 +22,10 @@
       id="password"
       placeholder="Password"
       class="input__field"
+      minlength="8"
+      maxlength="64"
+      pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,64}"
+      autocomplete="current-password"
       required
     />
   </div>
@@ -27,6 +35,6 @@
 </form>
 <!-- User message -->
 {% if msg %}
-<div>{{ msg|safe }}</div>
+<div>{{ msg }}</div>
 {% endif %}
 {% endblock %}

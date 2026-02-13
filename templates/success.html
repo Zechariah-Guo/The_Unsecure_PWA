@@ -1,9 +1,19 @@
 {% extends 'layout.html' %}
 {% block content %}
 <h1>Welcome {{ value }}!</h1>
+{% if msg %}
+<div>{{ msg }}</div>
+{% endif %}
+{% if show_2fa_cta %}
+<div class="cta">
+  <strong>Boost your security:</strong> Enable 2FA to protect your account.
+  <a class="btn" href="/2fa/setup">Enable 2FA</a>
+</div>
+{% endif %}
 <form action="/success.html" method="post" class="box">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
   <div class="input__wrapper">
-    <input style="height:100px;vertical-align:top" type="text" name="feedback" id="feedback" placeholder="Enter your feedback here" class="input__field" required/>
+    <input style="height:100px;vertical-align:top" type="text" name="feedback" id="feedback" placeholder="Enter your feedback here" class="input__field" maxlength="500" required/>
   </div>
   <div class="input__wrapper">
     <input type="submit" class="btn" value="Submit Feedback" />

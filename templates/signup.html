@@ -1,15 +1,19 @@
 {% extends 'layout.html' %}
 {% block content %}
 <h1>Signup Form</h1>
+{% if msg %}
+<div>{{ msg }}</div>
+{% endif %}
 <form action="/signup.html" method="POST" class="box">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
     <div class="input__wrapper">
-        <input type="text" name="username" placeholder="Username" class="input__field">
+        <input type="text" name="username" placeholder="Username" class="input__field" maxlength="32" pattern="[A-Za-z0-9_]{3,32}" autocomplete="username" required>
     </div>            
     <div class="input__wrapper">
-        <input type="password" name="password" placeholder="Password" class="input__field">
+        <input type="password" name="password" placeholder="Password" class="input__field" minlength="8" maxlength="64" pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,64}" autocomplete="new-password" required>
     </div>
     <div class="input__wrapper">
-        <input type="dateOfBirth" name="dob" placeholder="Date of Birth" class="input__field">
+        <input type="date" name="dob" placeholder="Date of Birth" class="input__field" autocomplete="bday" required>
     </div>
     <div class="input__wrapper">
         <button type="submit" class="btn">Submit</button>

@@ -1,60 +1,81 @@
+import html
 import sqlite3 as sql
-import time
-import random
+import portalocker
+from werkzeug.security import generate_password_hash, check_password_hash
+
+DUMMY_PASSWORD_HASH = generate_password_hash("invalid-password")
 
 
 def insertUser(username, password, DoB):
-    con = sql.connect("database_files/database.db")
-    cur = con.cursor()
-    cur.execute(
-        "INSERT INTO users (username,password,dateOfBirth) VALUES (?,?,?)",
-        (username, password, DoB),
-    )
-    con.commit()
-    con.close()
+    password_hash = generate_password_hash(password)
+    with sql.connect("database_files/database.db") as con:
+        cur = con.cursor()
+        cur.execute(
+            "INSERT INTO users (username,password,dateOfBirth,otp_enabled) VALUES (?,?,?,?)",
+            (username, password_hash, DoB, 0),
+        )
 
 
 def retrieveUsers(username, password):
-    con = sql.connect("database_files/database.db")
-    cur = con.cursor()
-    cur.execute(f"SELECT * FROM users WHERE username = '{username}'")
-    if cur.fetchone() == None:
-        con.close()
-        return False
-    else:
-        cur.execute(f"SELECT * FROM users WHERE password = '{password}'")
-        # Plain text log of visitor count as requested by Unsecure PWA management
-        with open("visitor_log.txt", "r") as file:
-            number = int(file.read().strip())
-            number += 1
-        with open("visitor_log.txt", "w") as file:
-            file.write(str(number))
-        # Simulate response time of heavy app for testing purposes
-        time.sleep(random.randint(80, 90) / 1000)
-        if cur.fetchone() == None:
-            con.close()
+    with sql.connect("database_files/database.db") as con:
+        cur = con.cursor()
+        cur.execute("SELECT password FROM users WHERE username = ?", (username,))
+        row = cur.fetchone()
+        if row is None:
+            check_password_hash(DUMMY_PASSWORD_HASH, password)
             return False
-        else:
-            con.close()
-            return True
+        stored_hash = row[0]
+        if not check_password_hash(stored_hash, password):
+            return False
+
+        # Plain text log of visitor count as requested by Unsecure PWA management
+        with portalocker.Lock("visitor_log.txt", "r+", timeout=2) as file:
+            content = file.read().strip()
+            number = int(content) if content else 0
+            number += 1
+            file.seek(0)
+            file.truncate()
+            file.write(str(number))
+
+        return True
 
 
 def insertFeedback(feedback):
-    con = sql.connect("database_files/database.db")
-    cur = con.cursor()
-    cur.execute(f"INSERT INTO feedback (feedback) VALUES ('{feedback}')")
-    con.commit()
-    con.close()
+    with sql.connect("database_files/database.db") as con:
+        cur = con.cursor()
+        cur.execute("INSERT INTO feedback (feedback) VALUES (?)", (feedback,))
 
 
 def listFeedback():
-    con = sql.connect("database_files/database.db")
-    cur = con.cursor()
-    data = cur.execute("SELECT * FROM feedback").fetchall()
-    con.close()
+    with sql.connect("database_files/database.db") as con:
+        cur = con.cursor()
+        data = cur.execute("SELECT * FROM feedback").fetchall()
     f = open("templates/partials/success_feedback.html", "w")
     for row in data:
+        safe_feedback = html.escape(str(row[1]))
         f.write("<p>\n")
-        f.write(f"{row[1]}\n")
+        f.write(f"{safe_feedback}\n")
         f.write("</p>\n")
     f.close()
+
+
+def get_2fa_status(username):
+    with sql.connect("database_files/database.db") as con:
+        cur = con.cursor()
+        cur.execute(
+            "SELECT otp_enabled, otp_secret FROM users WHERE username = ?",
+            (username,),
+        )
+        row = cur.fetchone()
+    if row is None:
+        return False, None
+    return bool(row[0]), row[1]
+
+
+def enable_2fa(username, secret):
+    with sql.connect("database_files/database.db") as con:
+        cur = con.cursor()
+        cur.execute(
+            "UPDATE users SET otp_secret = ?, otp_enabled = 1 WHERE username = ?",
+            (secret, username),
+        )

@@ -151,3 +151,11 @@ label,
     text-align: justify;
     text-justify: inter-word;
 }
+.cta {
+    border: 1px solid #f0c36d;
+    background: #fff4d6;
+    color: #5a3b00;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    margin: 1rem 0;
+}

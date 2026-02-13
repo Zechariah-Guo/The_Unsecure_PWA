@@ -1,0 +1,28 @@
+{% extends 'layout.html' %}
+{% block content %}
+<h1>Two-Factor Authentication</h1>
+<p>Enter the 6-digit code from your authenticator app.</p>
+<form action="/2fa/verify" method="post" class="box">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+  <div class="input__wrapper">
+    <input
+      type="text"
+      name="otp"
+      id="otp"
+      placeholder="123456"
+      class="input__field"
+      minlength="6"
+      maxlength="6"
+      pattern="\d{6}"
+      autocomplete="one-time-code"
+      required
+    />
+  </div>
+  <div class="input__wrapper">
+    <input type="submit" class="btn" value="Verify" />
+  </div>
+</form>
+{% if msg %}
+<div>{{ msg }}</div>
+{% endif %}
+{% endblock %}
