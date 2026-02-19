@@ -1,6 +1,7 @@
 import os
 import re
 from io import BytesIO
+from datetime import timedelta
 from flask import Flask
 from flask import render_template
 from flask import request
@@ -17,6 +18,8 @@ import user_management as dbHandler
 
 app = Flask(__name__)
 app.secret_key = os.environ.get("FLASK_SECRET_KEY", "dev-secret-key")
+app.config["PERMANENT_SESSION_LIFETIME"] = timedelta(minutes=30)
+app.config["SESSION_COOKIE_SAMESITE"] = "Lax"
 csrf = CSRFProtect(app)
 
 USERNAME_RE = re.compile(r"^[A-Za-z0-9_]{3,32}$")
@@ -80,6 +83,7 @@ def add_security_headers(response):
     response.headers["X-Frame-Options"] = "DENY"
     response.headers["X-Content-Type-Options"] = "nosniff"
     response.headers["Referrer-Policy"] = "same-origin"
+    response.headers.pop("Server", None)
     return response
 
 
@@ -101,7 +105,7 @@ def _should_show_2fa_cta(username):
     return not enabled
 
 
-@app.route("/success.html", methods=["POST", "GET", "PUT", "PATCH", "DELETE"])
+@app.route("/success.html", methods=["GET", "POST"])
 def addFeedback():
     if not session.get("user"):
         return redirect("/index.html?msg=Please log in")
@@ -136,7 +140,7 @@ def addFeedback():
         )
 
 
-@app.route("/signup.html", methods=["POST", "GET", "PUT", "PATCH", "DELETE"])
+@app.route("/signup.html", methods=["GET", "POST"])
 def signup():
     if request.method == "GET" and request.args.get("url"):
         url = request.args.get("url", "")
@@ -161,8 +165,8 @@ def signup():
         return render_template("/signup.html")
 
 
-@app.route("/index.html", methods=["POST", "GET", "PUT", "PATCH", "DELETE"])
-@app.route("/", methods=["POST", "GET"])
+@app.route("/index.html", methods=["GET", "POST"])
+@app.route("/", methods=["GET", "POST"])
 def home():
     # Simple Dynamic menu
     if request.method == "GET" and request.args.get("url"):
@@ -188,6 +192,9 @@ def home():
             if enabled:
                 session["pending_user"] = username
                 return redirect("/2fa/verify")
+            session.pop("pending_user", None)
+            session.clear()
+            session.permanent = True
             session["user"] = username
             dbHandler.listFeedback()
             return render_template(
@@ -273,6 +280,8 @@ def two_factor_verify():
         otp_input = request.form.get("otp", "").strip()
         if pyotp.TOTP(secret).verify(otp_input):
             session.pop("pending_user", None)
+            session.clear()
+            session.permanent = True
             session["user"] = pending_user
             dbHandler.listFeedback()
             return render_template(
